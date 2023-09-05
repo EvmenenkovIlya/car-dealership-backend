@@ -1,9 +1,8 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Query, Req } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { UsersService } from './users.service';
 import { User } from './users.schema';
 import { CreateUserDto } from './models/CreateUserDto';
-import { ObjectId } from 'mongoose';
 import { UpdateUserDto } from './models/UpdateUserDto';
 
 const route = 'users';
@@ -23,6 +22,13 @@ export class UsersController {
     @Param('id') id: string,
   ): Promise<User> {
     return this.userService.findById(id);
+  }
+
+  @Get("name")
+  getByName(
+    @Query() name: string,
+    ): Promise<User | undefined> {
+    return this.userService.findOne(name);
   }
 
   @Post("add")

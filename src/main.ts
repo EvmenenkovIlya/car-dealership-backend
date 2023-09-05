@@ -9,7 +9,6 @@ async function bootstrap() {
     .setTitle('Cars dealership')
     .setDescription('The cars API description')
     .setVersion('1.0')
-    .addTag('ABC-auto')
     .build();
     
   const document = SwaggerModule.createDocument(app, config);
