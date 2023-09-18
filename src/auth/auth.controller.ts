@@ -1,7 +1,7 @@
 
 import { Body, Controller, Post, HttpCode, HttpStatus, UseGuards, Get, Request } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { AuthGuard, Public } from './auth.guard';
+import { AuthGuard, Private } from './auth.guard';
 import { ApiTags } from '@nestjs/swagger';
 
 const route = 'auth';
@@ -12,15 +12,18 @@ export class AuthController {
   constructor(private authService: AuthService) {}
 
   @UseGuards(AuthGuard)
-  @Get('profile')
-  getProfile(@Request() req) {
-    return req.user;
+  @Post('get-user-by-token')
+  getProfile(
+    @Body() payload: Record<string, string>,
+    ) {
+    return this.authService.getUser(payload.token);
   }
   
   @HttpCode(HttpStatus.OK)
-  @Public()
   @Post('login')
-  signIn(@Body() signInDto: Record<string, string>) {
-    return this.authService.signIn(signInDto.username, signInDto.password);
+  signIn(
+    @Body() signInDto: Record<string, string>
+    ) {
+    return this.authService.signIn(signInDto.login, signInDto.password);
   }
 }

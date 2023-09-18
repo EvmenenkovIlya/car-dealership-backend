@@ -4,6 +4,7 @@ import { UsersService } from './users.service';
 import { User } from './users.schema';
 import { CreateUserDto } from './models/CreateUserDto';
 import { UpdateUserDto } from './models/UpdateUserDto';
+import { Private } from 'src/auth/auth.guard';
 
 const route = 'users';
 
@@ -17,18 +18,18 @@ export class UsersController {
     return this.userService.findAll();
   }
 
+  @Get('by-login')
+  getByLogin(
+    @Query("login") login: string,
+    ): Promise<User | undefined> {
+    return this.userService.findByLogin(login);
+  }
+
   @Get(":id")
   getById(
     @Param('id') id: string,
   ): Promise<User> {
     return this.userService.findById(id);
-  }
-
-  @Get("name")
-  getByName(
-    @Query() name: string,
-    ): Promise<User | undefined> {
-    return this.userService.findOne(name);
   }
 
   @Post("add")
@@ -38,6 +39,7 @@ export class UsersController {
     return this.userService.create(model)
   }
 
+  @Private()
   @Put(':id')
   update(
     @Param('id') id: string,
@@ -46,6 +48,7 @@ export class UsersController {
     return this.userService.update(id, model)
   }
   
+  @Private()
   @Delete(':id')
   remove(
     @Param('id') id: string,
