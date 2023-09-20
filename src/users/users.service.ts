@@ -1,9 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { InjectConnection, InjectModel } from '@nestjs/mongoose';
-import { Connection, Model } from 'mongoose';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 import { User, UserDocument } from './users.schema';
 import { CreateUserDto } from './models/CreateUserDto';
-import { ObjectId } from 'typeorm';
 import { UpdateUserDto } from './models/UpdateUserDto';
 
 @Injectable()
@@ -39,4 +38,8 @@ export class UsersService {
   async remove(id: string ) : Promise<User>{
     return this.userRepository.findByIdAndDelete(id);
   }
+
+  async findByLogin(login: string) : Promise<User> {
+    return this.userRepository.findOne({login: login});
+  }  
 }

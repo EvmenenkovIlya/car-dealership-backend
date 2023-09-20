@@ -1,10 +1,10 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Query, Req } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { UsersService } from './users.service';
 import { User } from './users.schema';
 import { CreateUserDto } from './models/CreateUserDto';
-import { ObjectId } from 'mongoose';
 import { UpdateUserDto } from './models/UpdateUserDto';
+import { Private } from 'src/auth/auth.guard';
 
 const route = 'users';
 
@@ -16,6 +16,13 @@ export class UsersController {
   @Get()
   getAll(): Promise<User[]> {
     return this.userService.findAll();
+  }
+
+  @Get('by-login')
+  getByLogin(
+    @Query("login") login: string,
+    ): Promise<User | undefined> {
+    return this.userService.findByLogin(login);
   }
 
   @Get(":id")
@@ -32,6 +39,7 @@ export class UsersController {
     return this.userService.create(model)
   }
 
+  @Private()
   @Put(':id')
   update(
     @Param('id') id: string,
@@ -40,6 +48,7 @@ export class UsersController {
     return this.userService.update(id, model)
   }
   
+  @Private()
   @Delete(':id')
   remove(
     @Param('id') id: string,
