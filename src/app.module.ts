@@ -8,8 +8,10 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
 
+require('dotenv').config();
+
 @Module({
-  imports: [MongooseModule.forRoot('mongodb://adminuser:qwe!23@194.87.210.5:27017/CarsDb?authMechanism=DEFAULT&authSource=admin') , AuthModule, UsersModule, CarsModule],
+  imports: [MongooseModule.forRoot(process.env.MONGODB_URI), AuthModule, UsersModule, CarsModule],
   controllers: [AppController],
   providers: [AuthService, CarsService, AppService],
 })
